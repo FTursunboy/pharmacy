@@ -53,43 +53,41 @@ class ProductService implements ProductServiceInterface
         $categoryCode = $data['categoryCode'];
         $userShopCode = Auth::user()->shop_code;
 
-        $products = Product::query()
-            ->where([
-                ['category_id', $categoryCode],
-            ])
-            ->paginate(self::ON_PAGE);
+        $products = Product::where('category_id', $categoryCode)
+            ->where('shop_code', $userShopCode)
+            ->paginate(20, ['id', 'code', 'name']);
 
         foreach ($products as $product) {
-            $product->image_name = ProductImage::where('product_code', $product->code)->value('image_name');
-
+            $productImage = ProductImage::where('code', $product->code)->first();
+            $product->image_name = $productImage ? $productImage->image_name : null;
 
             $productProperty = ProductProperty::where('product_code', $product->code)
                 ->where('shop_code', $userShopCode)
                 ->first();
 
-
             if ($productProperty) {
                 if ($productProperty->stock == 0) {
-                    $product->price = $productProperty->imp_old_price ?? $productProperty->price;
+                    $product->price = $productProperty->old_price !== null && $productProperty->old_price != 0
+                        ? $productProperty->old_price
+                        : $productProperty->price;
                     $product->oldPrice = null;
                 } else {
                     $promotion = PromotionActionPageList::where('product_code', $product->code)->first();
 
                     if ($promotion) {
                         $product->price = $promotion->price;
-                        $product->oldPrice = $promotion->price_old;
+                        $product->oldPrice = $promotion->old_price;
                     } else {
                         $product->price = $productProperty->price;
                         $product->oldPrice = null;
                     }
                 }
-
             }
         }
 
-
         return $products;
     }
+
 
 
 }
