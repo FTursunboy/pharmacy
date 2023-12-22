@@ -62,16 +62,16 @@ class ProductService implements ProductServiceInterface
         foreach ($products as $product) {
             $product->image_name = ProductImage::where('product_code', $product->code)->value('image_name');
 
+
             $productProperty = ProductProperty::where('product_code', $product->code)
                 ->where('shop_code', $userShopCode)
                 ->first();
 
 
-
-
             if ($productProperty) {
                 if ($productProperty->stock == 0) {
                     $product->price = $productProperty->old_price ?? $productProperty->price;
+                    $product->stock = $productProperty->stock;
                     $product->oldPrice = null;
                 } else {
                     $promotion = PromotionActionPageList::where('product_code', $product->code)
@@ -80,7 +80,6 @@ class ProductService implements ProductServiceInterface
                     if ($promotion) {
                         $product->price = $promotion->price;
                         $product->old_price = $promotion->old_price;
-
                     }
                     else {
                         $product->price = $productProperty->price;
