@@ -17,7 +17,7 @@ class AuthResource extends JsonResource
         return [
             'name' => $this->resource->name,
             'phone' => $this->resource->phone,
-            'newsletter_confirmation' => $this->resource->newsletter_confirmation,
+            'notify_offers' => $this->resource->notify_offers,
             'created_at' => $this->resource->created_at,
         ];
     }
