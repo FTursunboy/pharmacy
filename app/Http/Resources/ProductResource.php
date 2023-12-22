@@ -19,7 +19,8 @@ class ProductResource extends JsonResource
             'code' => $this->resource->code,
             'image_name' => $this->resource->image_name,
             'price' => $this->resource->price,
-            'old_price' => $this->resource->old_price
+            'old_price' => $this->resource->old_price,
+            'stock' => $this->resource->stock
         ];
     }
 }
