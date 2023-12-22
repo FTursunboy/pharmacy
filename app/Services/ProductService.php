@@ -54,10 +54,10 @@ class ProductService implements ProductServiceInterface
         $userShopCode = Auth::user()->shop_code;
 
         $products = Product::where('category_id', $categoryCode)
-            ->paginate(20, ['id', 'code', 'name']);
+            ->paginate(20);
 
         foreach ($products as $product) {
-            $productImage = ProductImage::where('code', $product->code)->first();
+            $productImage = ProductImage::where('product_code', $product->code)->first();
             $product->image_name = $productImage ? $productImage->image_name : null;
 
             $productProperty = ProductProperty::where('product_code', $product->code)
