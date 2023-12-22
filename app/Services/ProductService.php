@@ -54,7 +54,6 @@ class ProductService implements ProductServiceInterface
         $userShopCode = Auth::user()->shop_code;
 
         $products = Product::where('category_id', $categoryCode)
-            ->where('shop_code', $userShopCode)
             ->paginate(20, ['id', 'code', 'name']);
 
         foreach ($products as $product) {
