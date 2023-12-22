@@ -15,12 +15,11 @@ class AuthService implements AuthServiceInterface
     {
         $user =  $this->modelClass::firstOrCreate([
             'phone' => $data['phone'],
-            'name' => $data['name'],
+            'name' => 'user',
             'password' => Hash::make($data['password']),
             'notify_offers' => $data['notify_offers'],
             'shop_code' => '5800'
         ]);
-
 
         $code = "000000";
 

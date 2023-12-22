@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterRequest extends FormRequest
+class ProductCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,19 +22,8 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone' => [
-                'string',
-                'unique:users,phone'
-            ],
-            'password' => 'string|min:6',
-            'notify_offers' => 'boolean'
+            'categoryCode' => 'required|numeric|exists:product_categories,code',
         ];
     }
 
-    public function messages()
-    {
-        return [
-            'phone.unique' => 'Аккаунт уже существут. Выполните вход',
-        ];
-    }
 }
