@@ -56,7 +56,6 @@ class ProductService implements ProductServiceInterface
         $products = Product::query()
             ->where([
                 ['category_id', $categoryCode],
-                ['shop_code', $userShopCode]
             ])
             ->paginate(self::ON_PAGE);
 
@@ -66,6 +65,9 @@ class ProductService implements ProductServiceInterface
             $productProperty = ProductProperty::where('product_code', $product->code)
                 ->where('shop_code', $userShopCode)
                 ->first();
+
+
+
 
             if ($productProperty) {
                 if ($productProperty->stock == 0) {
