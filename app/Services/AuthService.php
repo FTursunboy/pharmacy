@@ -15,6 +15,7 @@ class AuthService implements AuthServiceInterface
     {
         $user =  $this->modelClass::firstOrCreate([
             'phone' => $data['phone'],
+            'name' => $data['name'],
             'password' => Hash::make($data['password']),
             'notify_offers' => $data['notify_offers'],
             'shop_code' => '5800'
