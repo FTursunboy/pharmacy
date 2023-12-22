@@ -10,7 +10,7 @@ trait ApiResponse
     {
         if (is_string($result))
             return $this->success($result, $code);
-        return response()->json(['result' => paginatedResponse($result)], $code);
+        return response()->json([paginatedResponse($result)], $code);
     }
 
     public function success($result = 'Успешно', $code = 200): JsonResponse
