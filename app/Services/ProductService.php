@@ -82,8 +82,9 @@ class ProductService implements ProductServiceInterface
                         $product->old_price = $promotion->old_price;
                     }
                     else {
-                        $product->price = $productProperty->price;
-                        $product->oldPrice = $productProperty->old_price;
+                        $product->price = $productProperty->old_price ?? $productProperty->price;
+                        $product->stock = $productProperty->stock;
+                        $product->oldPrice = null;
                     }
                 }
             }
