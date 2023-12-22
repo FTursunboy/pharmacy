@@ -66,19 +66,19 @@ class ProductService implements ProductServiceInterface
 
             if ($productProperty) {
                 if ($productProperty->stock == 0) {
-                    $product->price = $productProperty->imp_old_price !== null && $productProperty->imp_old_price != 0.00
+                    $product->price = $productProperty->imp_old_price !== null && $productProperty->imp_old_price != 0
                         ? $productProperty->imp_old_price
                         : $productProperty->price;
-                    $product->oldPrice = null;
+                    $product->old_price = null;
                 } else {
                     $promotion = PromotionActionPageList::where('product_code', $product->code)->first();
 
                     if ($promotion) {
                         $product->price = $promotion->price;
-                        $product->oldPrice = $promotion->price_old;
+                        $product->old_price = $promotion->price_old;
                     } else {
                         $product->price = $productProperty->price;
-                        $product->oldPrice = null;
+                        $product->old_price = null;
                     }
                 }
             }
