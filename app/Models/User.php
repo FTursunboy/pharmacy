@@ -26,7 +26,7 @@ class User extends Authenticatable
         'phone',
         'code',
         'shop_code',
-        'newsletter_confirmation',
+        'notify_offers',
         'status',
         'password',
     ];
