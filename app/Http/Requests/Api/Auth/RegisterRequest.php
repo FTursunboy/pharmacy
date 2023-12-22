@@ -27,7 +27,7 @@ class RegisterRequest extends FormRequest
                 'unique:users,phone'
             ],
             'password' => 'string|min:6',
-            'newsletter_confirmation' => 'boolean'
+            'notify_offers' => 'boolean'
         ];
     }
 
