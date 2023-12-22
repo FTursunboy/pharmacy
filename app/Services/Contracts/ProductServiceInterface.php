@@ -6,6 +6,6 @@ use Illuminate\Http\JsonResponse;
 
 interface ProductServiceInterface
 {
-    public function getProd(array $data);
+    public function getProducts(array $data);
 
 }

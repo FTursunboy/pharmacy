@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Api\ProductCategoryController;
+use \App\Http\Controllers\Api\ProductController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +22,7 @@ Route::group([
     'middleware' => ['auth:sanctum'],
 ], function () {
     Route::post('category', [ProductCategoryController::class, 'getCategories']);
+    Route::post('products', [ProductController::class, 'getProducts']);
 });
 
 Route::post('register', [\App\Http\Controllers\Api\AuthController::class, 'register']);
