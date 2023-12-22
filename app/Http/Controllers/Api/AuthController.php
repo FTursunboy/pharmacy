@@ -23,11 +23,7 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request, AuthServiceInterface $service)
     {
-        $user = $service->login($request->validated());
-        $apiToken = $user->createToken('login token');
-
-        return AuthResource::make($user)
-            ->additional(['token' => $apiToken->toArray()]);
+        return $this->success($service->login($request->validated()));
     }
 
     public function confirm(VerifyRequest $request, AuthServiceInterface $service)
@@ -35,8 +31,13 @@ class AuthController extends Controller
         $user = $service->codeVerification($request->validated());
         $apiToken = $user->createToken('login token');
 
-        return AuthResource::make($user)
-            ->additional(['token' => $apiToken->toArray()]);
+
+
+        return response()->json([
+            'user' => AuthResource::make($user),
+            'token' => $apiToken->plainTextToken,
+        ]);
     }
+
 
 }

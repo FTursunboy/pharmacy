@@ -34,11 +34,10 @@ class AuthService implements AuthServiceInterface
     {
         $user = $this->modelClass::where('phone', $data['phone'])->first();
 
-        if ($user && Hash::check($data['password'], $user->password)) {
-            return $user;
+        if (!$user || !Hash::check($data['password'], $user->password)) {
+            throw ValidationException::withMessages(['message' => __('auth.failed')]);
         }
 
-        throw ValidationException::withMessages(['message' => __('auth.failed')]);
     }
 
 
