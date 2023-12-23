@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Api\ProductCategoryController;
 use \App\Http\Controllers\Api\ProductController;
 use \App\Http\Controllers\Api\UserController;
+use \App\Http\Controllers\Api\ShopController;
 
 
 /*
@@ -24,6 +25,8 @@ Route::group([
 ], function () {
     Route::post('category', [ProductCategoryController::class, 'getCategories']);
     Route::post('products', [ProductController::class, 'getProducts']);
+    Route::post('productByCode', [ProductController::class, 'productByCode']);
+    Route::get('cities', [ShopController::class, 'getCities']);
 
     Route::group([
         'prefix' => 'profile'

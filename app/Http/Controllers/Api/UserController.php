@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Services\Contracts\UserServiceInterface;
 use App\Traits\ApiResponse;
@@ -18,8 +19,8 @@ class UserController extends Controller
         return $this->success(UserResource::make($service->profile()));
     }
 
-    public  function update() :JsonResponse
+    public  function update(UserRequest $request, UserServiceInterface $service) :JsonResponse
     {
-
+        return $this->success(UserResource::make($service->update($request->validated())));
     }
 }

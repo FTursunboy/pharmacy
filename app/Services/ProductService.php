@@ -35,7 +35,7 @@ class ProductService implements ProductServiceInterface
 
             if ($productProperty) {
                 if ($productProperty->stock == 0) {
-                    $product->price = $productProperty->price_stock != null && $productProperty->price_stock != 0
+                    $product->price = $productProperty->price_stock !== null && $productProperty->price_stock != 0
                         ? $productProperty->price_stock
                         : $productProperty->price;
                     $product->old_price = null;
@@ -56,6 +56,39 @@ class ProductService implements ProductServiceInterface
         return $products;
     }
 
+    //Метод “/product“
+    //
+    //Принимает body параметром code товара
+    //
+    //Вернуть товар, выбирая тот, у которого shop_code одинаковый с shop_code юзера
+    //
+    //
+    //
+    //Товар должен содержать поля:
+    //
+    //id,
+    //
+    //code,
+    //
+    //name,
+    //
+    //manufacturer,
+    //
+    //description,
+    //
+    //image_name (брать из табл. product_images по code товара из табл. product)
+    //
+    //price (отдавать по той же логике, которая в списке товаров)
+    //
+    //old_price (по той же логике, которая в списке товаров)
+    //
+    //actions_list список из первых 5 элементов таблицы promotion_actions_page_list. У этих 5 элементов те же поля, что и у элементов, возвращаемых методом “/products” (name, code, image_name, price, old_price). Только price и oldPrice брать сразу тут (в табл. promotion_actions_page_list)
+
+    public function getProductByCode(array $data)
+    {
+        $code = $data['code'];
+        $userShopCode = Auth::user()->shop_code;
+    }
 
 
 }

@@ -21,6 +21,12 @@ class UserService implements UserServiceInterface
 
     public function update(array $data)
     {
-        // TODO: Implement update() method.
+        $user = User::find(Auth::id());
+
+        $user->update([[
+            'name' => $data['name'],
+            'email' => $data['email'],
+            ''
+        ]]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\ProductCodeRequest;
 use App\Http\Requests\Api\ProductRequest;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ProductResource;
@@ -19,5 +20,10 @@ class ProductController extends Controller
     public function getProducts(ProductRequest $request, ProductServiceInterface $service) :JsonResponse
     {
         return $this->paginate(ProductResource::collection($service->getProducts($request->validated())));
+    }
+
+    public function productByCode(ProductCodeRequest $request, ProductServiceInterface $service) :JsonResponse
+    {
+        return $this->success(ProductResource::make($service->getProductByCode($request->validated())));
     }
 }
