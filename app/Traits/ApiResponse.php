@@ -18,14 +18,6 @@ trait ApiResponse
         return response()->json(['result' => $result ?? 'Успешно', 'errors' => null], $code);
     }
 
-    public function paginateChat($result = 'Успешно', $code = 200): JsonResponse
-    {
-        if (is_string($result))
-            return $this->success($result, $code);
-
-        return response()->json(['result' => paginatedResponseChat($result)], $code);
-    }
-
     public function notAccess($message = 'У вас нет доступа!', $code = 405): JsonResponse
     {
         return $this->error(['message' => $message], $code);

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Api\ProductCategoryController;
 use \App\Http\Controllers\Api\ProductController;
+use \App\Http\Controllers\Api\UserController;
 
 
 /*
@@ -23,6 +24,14 @@ Route::group([
 ], function () {
     Route::post('category', [ProductCategoryController::class, 'getCategories']);
     Route::post('products', [ProductController::class, 'getProducts']);
+
+    Route::group([
+        'prefix' => 'profile'
+    ], function () {
+        Route::get('/', [UserController::class, 'profile']);
+        Route::patch('/', [UserController::class, 'update']);
+    });
+
 });
 
 Route::post('register', [\App\Http\Controllers\Api\AuthController::class, 'register']);
