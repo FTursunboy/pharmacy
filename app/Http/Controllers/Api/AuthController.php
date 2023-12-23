@@ -24,7 +24,7 @@ class AuthController extends Controller
     public function login(LoginRequest $request, AuthServiceInterface $service)
     {
         $user = $service->login($request->validated());
-        $token = $user->createToken('api token')->plainTextToken
+        $token = $user->createToken('api token')->plainTextToken;
         return response()->json([
             'user' => AuthResource::make($user),
             'token' => $token,
