@@ -35,7 +35,7 @@ class ProductService implements ProductServiceInterface
 
             if ($productProperty) {
                 if ($productProperty->stock == 0) {
-                    $product->price = $productProperty->price_stock !== null && $productProperty->price_stock != 0
+                    $product->price = $productProperty->price_stock !== null && $productProperty->price_stock != 0.00
                         ? $productProperty->price_stock
                         : $productProperty->price;
                     $product->old_price = null;
