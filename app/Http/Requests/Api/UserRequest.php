@@ -22,10 +22,10 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string|required',
-            'email' => 'email|exists:users,email',
-            'phone' => 'string|exists:users,phone' . $this->phone,
-            'shop_code' => 'exists:shops,code'
+            'name' => 'string|nullable',
+            'email' => 'email|nullable|unique:users,email,' . auth()->id(),
+            'city' => 'string|nullable'
         ];
+
     }
 }
