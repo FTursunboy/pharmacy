@@ -38,6 +38,8 @@ class AuthService implements AuthServiceInterface
             throw ValidationException::withMessages(['message' => __('auth.failed')]);
         }
 
+        return $user;
+
     }
 
 

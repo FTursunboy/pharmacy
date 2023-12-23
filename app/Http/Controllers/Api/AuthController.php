@@ -23,7 +23,12 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request, AuthServiceInterface $service)
     {
-        return $this->success($service->login($request->validated()));
+        $user = $service->login($request->validated());
+        $token = $user->createToken('api token')->plainTextToken
+        return response()->json([
+            'user' => AuthResource::make($user),
+            'token' => $token,
+        ]);
     }
 
     public function confirm(VerifyRequest $request, AuthServiceInterface $service)
