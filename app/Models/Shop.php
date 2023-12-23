@@ -11,4 +11,10 @@ class Shop extends Model
 
     protected $table = 'shops';
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'code', 'shop_code');
+    }
+
+
 }

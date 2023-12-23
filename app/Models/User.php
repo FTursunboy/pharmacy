@@ -52,8 +52,9 @@ class User extends Authenticatable
     ];
 
 
-    public function shop()
+    public function shops()
     {
-        return $this->belongsTo(Shop::class,'shop', 'shop_code');
+        return $this->belongsTo(Shop::class, 'shop', 'shop_code');
     }
+
 }
