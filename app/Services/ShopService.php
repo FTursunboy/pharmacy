@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\Auth;
 class ShopService implements ShopServiceInterface
 {
 
+    public function index() {
+        return Shop::query()
+            ->get();
+    }
+
     public function getCities()
     {
         return Shop::query()

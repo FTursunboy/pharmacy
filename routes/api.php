@@ -27,7 +27,7 @@ Route::group([
     Route::post('products', [ProductController::class, 'getProducts']);
     Route::post('productByCode', [ProductController::class, 'productByCode']);
     Route::get('cities', [ShopController::class, 'getCities']);
-
+    Route::get('shops', [ShopController::class, 'index']);
     Route::group([
         'prefix' => 'profile'
     ], function () {
