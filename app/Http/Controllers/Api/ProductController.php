@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProductCodeRequest;
 use App\Http\Requests\Api\ProductRequest;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\ProductByCodeResource;
 use App\Http\Resources\ProductResource;
 use App\Services\Contracts\ProductCategoryServiceInterface;
 use App\Services\Contracts\ProductServiceInterface;
@@ -24,6 +25,6 @@ class ProductController extends Controller
 
     public function productByCode(ProductCodeRequest $request, ProductServiceInterface $service) :JsonResponse
     {
-        return $this->success(ProductResource::make($service->getProductByCode($request->validated())));
+        return $this->success(ProductByCodeResource::make($service->getProductByCode($request->validated())));
     }
 }

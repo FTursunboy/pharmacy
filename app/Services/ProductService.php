@@ -9,6 +9,7 @@ use App\Models\ProductProperty;
 use App\Models\PromotionActionPageList;
 use App\Services\Contracts\ProductServiceInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 
 class ProductService implements ProductServiceInterface
@@ -88,6 +89,37 @@ class ProductService implements ProductServiceInterface
     {
         $code = $data['code'];
         $userShopCode = Auth::user()->shop_code;
+
+        $product =  DB::table('products')
+            ->join('product_properties as pp', 'pp.product_code', 'products.code')
+            ->leftJoin('product_images as image', 'image.product_code', 'products.code')
+            ->where([
+                ['products.code', $code],
+                ['pp.shop_code', $userShopCode]
+            ])
+            ->select('products.id', 'products.code', 'products.name', 'products.manufacturer', 'products.description', 'image.image_name', 'pp.price_stock', 'pp.price', 'pp.stock')
+            ->first();
+
+        if ($product->stock == 0) {
+            $product->price = $product->price_stock !== null && $product->price_stock != 0
+                ? $product->price_stock
+                : $product->price;
+            $product->old_price = null;
+        } else {
+            $promotion = PromotionActionPageList::where('product_code', $product->code)->first();
+
+            if ($promotion) {
+                $product->price = $promotion->price;
+                $product->old_price = $promotion->price_old;
+            } else {
+                $product->price = $product->price;
+                $product->old_price = null;
+            }
+        }
+
+
+        return $product;
+
     }
 
 
