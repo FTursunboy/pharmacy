@@ -16,7 +16,7 @@ class ProductCategoryService implements ProductCategoryServiceInterface
 
     public function getCategories(array $data) :Collection
     {
-        if($data['categoryCode']) {
+        if(isset($data['categoryCode'])) {
             return ProductCategory::query()
                 ->where([
                     ['parent_code', $data['categoryCode']],
