@@ -18,7 +18,7 @@ class ProductCategoryService implements ProductCategoryServiceInterface
     {
         return ProductCategory::query()
             ->where([
-                ['parent_id', $data['categoryCode']],
+                ['parent_code', $data['categoryCode']],
                 ['active', 1]
             ])
             ->get();
@@ -26,7 +26,8 @@ class ProductCategoryService implements ProductCategoryServiceInterface
 
     public function activeCategories() :Collection
     {
-
+        return ProductCategory::query()
+            ->where('active', 1)->get();
     }
 
 }

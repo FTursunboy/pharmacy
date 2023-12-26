@@ -10,4 +10,6 @@ interface ProductCategoryServiceInterface
 {
     public function getCategories(array $data) :Collection;
 
+    public function activeCategories() :Collection;
+
 }

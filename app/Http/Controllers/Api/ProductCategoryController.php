@@ -21,6 +21,6 @@ class ProductCategoryController extends Controller
 
     public function activeCategories(ProductCategoryServiceInterface $service)
     {
-
+        return $this->success(CategoryResource::collection($service->active));
     }
 }
