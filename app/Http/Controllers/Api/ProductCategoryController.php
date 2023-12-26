@@ -18,4 +18,9 @@ class ProductCategoryController extends Controller
     {
         return $this->success(CategoryResource::collection($service->getCategories($request->validated())));
     }
+
+    public function activeCategories(ProductCategoryServiceInterface $service)
+    {
+
+    }
 }

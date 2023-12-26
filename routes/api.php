@@ -23,6 +23,7 @@ use \App\Http\Controllers\Api\ShopController;
 Route::group([
     'middleware' => ['auth:sanctum'],
 ], function () {
+    Route::get('activeCategories', [ProductCategoryController::class, 'activeCategories']);
     Route::post('category', [ProductCategoryController::class, 'getCategories']);
     Route::post('products', [ProductController::class, 'getProducts']);
     Route::post('productByCode', [ProductController::class, 'productByCode']);
