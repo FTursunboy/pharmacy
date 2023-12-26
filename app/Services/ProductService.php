@@ -133,6 +133,8 @@ class ProductService implements ProductServiceInterface
 
         $product->action_list = $action_list;
 
+        dump($product);
+
         return $product;
 
     }
