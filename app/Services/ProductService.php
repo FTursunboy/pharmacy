@@ -10,6 +10,7 @@ use App\Models\PromotionActionPageList;
 use App\Services\Contracts\ProductServiceInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 
 class ProductService implements ProductServiceInterface
@@ -89,7 +90,6 @@ class ProductService implements ProductServiceInterface
     {
         $code = $data['code'];
         $userShopCode = Auth::user()->shop_code;
-        dump(Product::where('code', $code)->first());
 
         $product =  DB::table('products')
             ->join('product_properties as pp', 'pp.product_code', 'products.code')
@@ -101,7 +101,9 @@ class ProductService implements ProductServiceInterface
             ->select('products.id', 'products.code', 'products.name', 'products.manufacturer', 'products.description', 'image.image_name', 'pp.price_stock', 'pp.price', 'pp.stock')
             ->first();
 
-        dump($product);
+        if (!$product) {
+            throw ValidationException::withMessages(['message' => 'The selected code is invalid.']);
+        }
 
 
 
@@ -125,7 +127,7 @@ class ProductService implements ProductServiceInterface
                             ['pr.status', 1]
                         ])
                         ->take(5)
-                        ->select('p.name', 'image.image_name', 'p.code', 'pr.price', 'pr.price_old')
+                        ->select('p.name', 'image.image_name', 'p.code', 'pr.price', 'pr.old_price')
                         ->get();
 
         $product->action_list = $action_list;
