@@ -113,6 +113,17 @@ class ProductService implements ProductServiceInterface
                 $product->old_price = $promotion->price_old;
             }
         }
+        $action_list =  DB::table('promotion_actions_page_list as pr')
+                        ->join('products as p', 'pr.product_code', 'p.code')
+                        ->leftJoin('product_images as image', 'image.product_code', 'pr.product_code')
+                        ->where([
+                            ['pr.status', 1]
+                        ])
+                        ->take(5)
+                        ->select('p.name', 'image.image_name', 'p.code', 'pr.price', 'pr.price_old')
+                        ->get();
+
+        $product->action_list = $action_list;
 
 
         return $product;

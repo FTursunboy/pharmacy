@@ -23,7 +23,7 @@ class ProductByCodeResource extends JsonResource
             'image_name' => $this->resource->image_name,
             'price' => $this->resource->price,
             'old_price' => $this->resource->old_price,
-            'action_list' => []
+            'action_list' => $this->action_list
         ];
     }
 }
