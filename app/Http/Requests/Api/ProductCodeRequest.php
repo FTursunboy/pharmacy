@@ -22,7 +22,7 @@ class ProductCodeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|exists:products,code|exists:product_properties,product_code'
+            'code' => 'required|exists:product_properties,product_code|exists:products,code'
         ];
     }
 }

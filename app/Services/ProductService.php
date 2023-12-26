@@ -100,6 +100,8 @@ class ProductService implements ProductServiceInterface
             ->select('products.id', 'products.code', 'products.name', 'products.manufacturer', 'products.description', 'image.image_name', 'pp.price_stock', 'pp.price', 'pp.stock')
             ->first();
 
+
+
         if ($product->stock == 0) {
             $product->price = $product->price_stock !== null && $product->price_stock != 0
                 ? $product->price_stock
