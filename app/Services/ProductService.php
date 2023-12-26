@@ -100,6 +100,7 @@ class ProductService implements ProductServiceInterface
             ])
             ->select('products.id', 'products.code', 'products.name', 'products.manufacturer', 'products.description', 'image.image_name', 'pp.price_stock', 'pp.price', 'pp.stock')
             ->first();
+        dump($product);
 
         if (!$product) {
             throw ValidationException::withMessages(['message' => 'The selected code is invalid.']);

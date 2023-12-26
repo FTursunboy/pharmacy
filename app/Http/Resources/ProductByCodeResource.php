@@ -22,7 +22,7 @@ class ProductByCodeResource extends JsonResource
             'description' => $this->resource->description,
             'image_name' => $this->resource->image_name,
             'price' => $this->resource->price,
-            'old_price' => $this->resource->old_price,
+            'old_price' => $this->old_price,
             'action_list' => $this->action_list
         ];
     }
