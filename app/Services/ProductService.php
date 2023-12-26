@@ -118,7 +118,7 @@ class ProductService implements ProductServiceInterface
 
             if ($promotion) {
                 $product->price = $promotion->price;
-                $product->old_price = $promotion->price_old;
+                $product->old_price = $promotion->old_price;
             }
         }
         $action_list =  DB::table('promotion_actions_page_list as pr')
@@ -130,10 +130,8 @@ class ProductService implements ProductServiceInterface
                         ->take(5)
                         ->select('p.name', 'image.image_name', 'p.code', 'pr.price', 'pr.old_price')
                         ->get();
-        dump($product);
 
         $product->action_list = $action_list;
-
 
         return $product;
 
