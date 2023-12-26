@@ -6,7 +6,7 @@ use \App\Http\Controllers\Api\ProductCategoryController;
 use \App\Http\Controllers\Api\ProductController;
 use \App\Http\Controllers\Api\UserController;
 use \App\Http\Controllers\Api\ShopController;
-
+use \App\Http\Controllers\Api\BannerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +24,7 @@ Route::group([
     'middleware' => ['auth:sanctum'],
 ], function () {
     Route::get('activeCategories', [ProductCategoryController::class, 'activeCategories']);
+    Route::get('banners', [BannerController::class, 'getBanners']);
     Route::post('category', [ProductCategoryController::class, 'getCategories']);
     Route::post('products', [ProductController::class, 'getProducts']);
     Route::post('productByCode', [ProductController::class, 'productByCode']);

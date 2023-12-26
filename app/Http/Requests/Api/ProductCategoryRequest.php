@@ -22,7 +22,7 @@ class ProductCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'categoryCode' => 'required|numeric|exists:product_categories,code',
+            'categoryCode' => 'nullable|numeric|exists:product_categories,code',
         ];
     }
 
