@@ -89,6 +89,7 @@ class ProductService implements ProductServiceInterface
     {
         $code = $data['code'];
         $userShopCode = Auth::user()->shop_code;
+        dump(Product::where('code', $code)->first());
 
         $product =  DB::table('products')
             ->join('product_properties as pp', 'pp.product_code', 'products.code')
@@ -99,6 +100,8 @@ class ProductService implements ProductServiceInterface
             ])
             ->select('products.id', 'products.code', 'products.name', 'products.manufacturer', 'products.description', 'image.image_name', 'pp.price_stock', 'pp.price', 'pp.stock')
             ->first();
+
+        dump($product);
 
 
 
