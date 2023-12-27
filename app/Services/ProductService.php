@@ -120,9 +120,7 @@ class ProductService implements ProductServiceInterface
                 $product->price = $promotion->price;
                 $product->old_price = $promotion->old_price;
             }
-            $product->price = $product->price_stock !== null && $product->price_stock != 0
-                ? $product->price_stock
-                : $product->price;
+            $product->price = $product->price;
             $product->old_price = null;
         }
         $action_list = DB::table('promotion_actions_page_list as pr')

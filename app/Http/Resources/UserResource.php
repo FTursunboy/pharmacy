@@ -17,7 +17,7 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         $shop = Shop::query()->where('code', $this->shop_code)->first();
-        $city = City::where('code', $shop->city_code)?->first()?->name;
+        $city = City::where('code', $shop?->city_code)?->first()?->name;
         return [
             'id' => $this->resource->id,
             'shop_code' => $this->resource->shop_code,
