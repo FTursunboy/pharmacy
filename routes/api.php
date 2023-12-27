@@ -37,6 +37,14 @@ Route::group([
         Route::patch('/', [UserController::class, 'update']);
     });
 
+    Route::group([
+        'prefix' => 'favourites'
+    ], function () {
+        Route::get('/', [ProductController::class, 'getFavourites']);
+        Route::post('/add', [ProductController::class, 'addToFavourite']);
+        Route::post('/remove', [ProductController::class, 'removeFromFavourites']);
+    });
+
 });
 
 Route::post('register', [\App\Http\Controllers\Api\AuthController::class, 'register']);

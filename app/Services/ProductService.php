@@ -8,6 +8,7 @@ use App\Models\ProductImage;
 use App\Models\ProductProperty;
 use App\Models\PromotionActionPageList;
 use App\Services\Contracts\ProductServiceInterface;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -91,7 +92,7 @@ class ProductService implements ProductServiceInterface
         $code = $data['code'];
         $userShopCode = Auth::user()->shop_code;
 
-        $product =  DB::table('products')
+        $product = DB::table('products')
             ->join('product_properties as pp', 'pp.product_code', 'products.code')
             ->leftJoin('product_images as image', 'image.product_code', 'products.code')
             ->where([
@@ -105,7 +106,6 @@ class ProductService implements ProductServiceInterface
         if (!$product) {
             throw ValidationException::withMessages(['message' => 'The selected code is invalid.']);
         }
-
 
 
         if ($product->stock == 0) {
@@ -125,15 +125,15 @@ class ProductService implements ProductServiceInterface
                 : $product->price;
             $product->old_price = null;
         }
-        $action_list =  DB::table('promotion_actions_page_list as pr')
-                        ->join('products as p', 'pr.product_code', 'p.code')
-                        ->leftJoin('product_images as image', 'image.product_code', 'pr.product_code')
-                        ->where([
-                            ['pr.status', 1]
-                        ])
-                        ->take(5)
-                        ->select('p.name', 'image.image_name', 'p.code', 'pr.price', 'pr.old_price')
-                        ->get();
+        $action_list = DB::table('promotion_actions_page_list as pr')
+            ->join('products as p', 'pr.product_code', 'p.code')
+            ->leftJoin('product_images as image', 'image.product_code', 'pr.product_code')
+            ->where([
+                ['pr.status', 1]
+            ])
+            ->take(5)
+            ->select('p.name', 'image.image_name', 'p.code', 'pr.price', 'pr.old_price')
+            ->get();
 
         $product->action_list = $action_list;
 
@@ -141,5 +141,56 @@ class ProductService implements ProductServiceInterface
 
     }
 
+    public function addToFavourite(array $data)
+    {
+        $user = Auth::user();
+
+        $user->favourites()->syncWithoutDetaching($data['product_code']);
+    }
+
+    public function removeFromFavourites(array $data)
+    {
+        $user = Auth::user();
+
+        $user->favourites()->detach($data['product_code']);
+    }
+
+
+    public function getFavourites()
+    {
+        $products = DB::table('products')
+            ->join('product_properties as pp', 'pp.product_code', 'products.code')
+            ->leftJoin('product_images as image', 'image.product_code', 'products.code')
+            ->join('bookmarked_products as bp', 'bp.product_code', '=', 'products.code')
+            ->whereIn('bp.user_id', [Auth::id()])
+            ->select('products.id', 'products.code', 'products.name', 'image.image_name', 'pp.price_stock', 'pp.price', 'pp.stock')
+            ->get();
+
+        if (!$products) {
+            return [];
+        }
+
+        foreach ($products as $product) {
+
+            if ($product->stock == 0) {
+                $product->price = $product->price_stock !== null && $product->price_stock != 0
+                    ? $product->price_stock
+                    : $product->price;
+                $product->old_price = null;
+            } else {
+                $promotion = PromotionActionPageList::where('product_code', $product->code)?->first();
+
+                if ($promotion) {
+                    $product->price = $promotion->price;
+                    $product->old_price = $promotion->price_old;
+                } else {
+                    $product->price = $product->price;
+                    $product->old_price = null;
+                }
+            }
+        }
+
+        return $products;
+    }
 
 }

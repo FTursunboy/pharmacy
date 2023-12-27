@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\FavouriteRequest;
 use App\Http\Requests\Api\ProductCodeRequest;
 use App\Http\Requests\Api\ProductRequest;
 use App\Http\Resources\CategoryResource;
@@ -18,13 +19,28 @@ class ProductController extends Controller
 {
     use ApiResponse;
 
-    public function getProducts(ProductRequest $request, ProductServiceInterface $service) :JsonResponse
+    public function getProducts(ProductRequest $request, ProductServiceInterface $service): JsonResponse
     {
         return $this->paginate(ProductResource::collection($service->getProducts($request->validated())));
     }
 
-    public function productByCode(ProductCodeRequest $request, ProductServiceInterface $service) :JsonResponse
+    public function productByCode(ProductCodeRequest $request, ProductServiceInterface $service): JsonResponse
     {
         return $this->success(ProductByCodeResource::make($service->getProductByCode($request->validated())));
+    }
+
+    public function addToFavourite(FavouriteRequest $request, ProductServiceInterface $service): JsonResponse
+    {
+        return $this->success($service->addToFavourite($request->validated()));
+    }
+
+    public function removeFromFavourites(FavouriteRequest $request, ProductServiceInterface $service) :JsonResponse
+    {
+        return $this->success($service->removeFromFavourites($request->validated()));
+    }
+
+    public function getFavourites(ProductServiceInterface $service) :JsonResponse
+    {
+        return $this->success(ProductResource::collection($service->getFavourites()));
     }
 }
