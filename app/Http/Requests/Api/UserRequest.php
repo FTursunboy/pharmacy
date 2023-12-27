@@ -22,9 +22,10 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'shop_code' => 'exists:shops,code',
             'name' => 'string|nullable',
             'email' => 'email|nullable|unique:users,email,' . auth()->id(),
-            'city' => 'string|nullable'
+            'city' => 'numeric|nullable|exists:cities,id'
         ];
 
     }

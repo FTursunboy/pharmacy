@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\City;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductImage;
@@ -24,10 +25,8 @@ class ShopService implements ShopServiceInterface
 
     public function getCities()
     {
-        return Shop::query()
-            ->selectRaw('MIN(id) as id, city_name')
-            ->groupBy('city_name')
-            ->orderBy('id')
+        return City::query()
+            ->select('id', 'name')
             ->get();
     }
 

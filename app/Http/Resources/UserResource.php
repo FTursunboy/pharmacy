@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\City;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -15,13 +16,17 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $shop = Shop::query()->where('code', $this->shop_code)->first();
+        $city = City::where('code', $shop->city_code)?->first()?->name;
         return [
             'id' => $this->resource->id,
             'shop_code' => $this->resource->shop_code,
             'name' => $this->resource->name,
             'email' => $this->resource->email,
             'phone' => $this->resource->phone,
-            'city' => Shop::where('code', $this->shop_code)->first()?->city_name
+            'city' => $city
         ];
+
+
     }
 }

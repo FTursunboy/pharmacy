@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CityResource;
 use App\Http\Resources\ShopResource;
 use App\Services\Contracts\ShopServiceInterface;
 use App\Traits\ApiResponse;
@@ -20,6 +21,6 @@ class ShopController extends Controller
 
     public function getCities(ShopServiceInterface $service) :JsonResponse
     {
-        return $this->success($service->getCities());
+        return $this->success(CityResource::collection($service->getCities()));
     }
 }
