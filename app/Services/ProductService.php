@@ -22,39 +22,51 @@ class ProductService implements ProductServiceInterface
 
     public function getProducts(array $data)
     {
+
         $categoryCode = $data['categoryCode'];
         $userShopCode = Auth::user()->shop_code;
 
-        $products = Product::where('category_id', $categoryCode)
-            ->paginate(self::ON_PAGE);
+
+        $products = DB::table('products')
+            ->join('product_properties as pp', 'pp.product_code', 'products.code')
+            ->leftJoin('product_images as image', 'image.product_code', 'products.code')
+            ->where([
+                ['products.category_id', $categoryCode],
+                ['pp.shop_code', $userShopCode]
+            ])
+            ->select('products.id', 'products.code', 'products.name', 'products.manufacturer', 'products.description', 'image.image_name', 'pp.price_stock', 'pp.price', 'pp.stock')
+            ->paginate();
+
+
+        if ($products->count() <= 0) {
+            throw ValidationException::withMessages(['message' => 'The selected code is invalid.']);
+        }
 
         foreach ($products as $product) {
-            $productImage = ProductImage::where('product_code', $product->code)->first();
-            $product->image_name = $productImage ? $productImage->image_name : null;
 
-            $productProperty = ProductProperty::where('product_code', $product->code)
-                ->where('shop_code', $userShopCode)
-                ->first();
-
-            if ($productProperty) {
-                if ($productProperty->stock == 0) {
-                    $product->price = $productProperty->price_stock !== null && $productProperty->price_stock != 0
-                        ? $productProperty->price_stock
-                        : $productProperty->price;
+            if ($product) {
+                if ($product->stock == 0) {
+                    $product->price = $product->price_stock !== null && $product->price_stock != 0
+                        ? $product->price_stock
+                        : $product->price;
                     $product->old_price = null;
+
                 } else {
                     $promotion = PromotionActionPageList::where('product_code', $product->code)->first();
 
                     if ($promotion) {
                         $product->price = $promotion->price;
                         $product->old_price = $promotion->price_old;
+
                     } else {
-                        $product->price = 1476;
+                        $product->price = $product->price;
                         $product->old_price = null;
+
                     }
                 }
             }
         }
+
 
         return $products;
     }
