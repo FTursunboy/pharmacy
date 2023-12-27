@@ -19,6 +19,7 @@ class ShopService implements ShopServiceInterface
 
     public function index() {
         return Shop::query()
+                ->whereNotNull('name')
                 ->where('shop_functions_enabled', 1)
             ->get();
     }
