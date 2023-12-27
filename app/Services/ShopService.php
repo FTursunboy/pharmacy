@@ -18,14 +18,17 @@ class ShopService implements ShopServiceInterface
 
     public function index() {
         return Shop::query()
+                ->where('shop_functions_enabled', 1)
             ->get();
     }
 
     public function getCities()
     {
         return Shop::query()
-            ->select('city_name')
-            ->distinct()
+            ->selectRaw('MIN(id) as id, city_name')
+            ->groupBy('city_name')
+            ->orderBy('id')
             ->get();
     }
+
 }
