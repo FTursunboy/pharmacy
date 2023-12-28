@@ -11,7 +11,7 @@ class ProductCategory extends Model
 
     public function children()
     {
-        return $this->hasMany(ProductCategory::class, 'parent_code', 'code');
+        return $this->hasMany(ProductCategory::class, 'parent_code', 'code')->where('active', 1);
     }
 
 }
