@@ -9,4 +9,9 @@ class ProductCategory extends Model
 {
     use HasFactory;
 
+    public function children()
+    {
+        return $this->hasMany(ProductCategory::class, 'parent_code', 'code');
+    }
+
 }

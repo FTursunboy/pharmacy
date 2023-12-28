@@ -17,7 +17,8 @@ class CategoryResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'code' => $this->resource->code,
-            'name' => $this->resource->name
+            'name' => $this->resource->name,
+            'hasChildren' => $this->resource->children->isNotEmpty()
         ];
     }
 }
