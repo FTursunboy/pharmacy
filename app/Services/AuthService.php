@@ -18,7 +18,7 @@ class AuthService implements AuthServiceInterface
             'name' => 'user',
             'password' => Hash::make($data['password']),
             'notify_offers' => $data['notify_offers'],
-            'shop_code' => '5800'
+            'shop_code' => '5222'
         ]);
 
         $code = "000000";
