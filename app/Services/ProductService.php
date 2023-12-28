@@ -105,8 +105,7 @@ class ProductService implements ProductServiceInterface
             ->join('product_properties as pp', 'pp.product_code', 'products.code')
             ->leftJoin('product_images as image', 'image.product_code', 'products.code')
             ->where([
-                ['products.code', $code],
-                ['pp.shop_code', $userShopCode]
+                ['products.code', $code]
             ])
             ->select('products.id', 'products.code', 'products.name', 'products.manufacturer', 'products.description', 'image.image_name', 'pp.price_stock', 'pp.price', 'pp.stock')
             ->first();
