@@ -4,7 +4,9 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Services\Contracts\AuthServiceInterface;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Testing\Fluent\Concerns\Has;
 use Illuminate\Validation\ValidationException;
 
 class AuthService implements AuthServiceInterface
@@ -64,5 +66,20 @@ class AuthService implements AuthServiceInterface
     public function resendCode(array $data)
     {
         // TODO: Implement resendCode() method.
+    }
+
+    public function resetPassword(array $data)
+    {
+        $code = "000000";
+        $this->modelClass::where('phone', $data['phone'])->update(['code' => $code]);
+    }
+
+    public function setPassword(array $data)
+    {
+        $user = Auth::user();
+
+        $user->update([
+            'password' => Hash::make($data['password']),
+        ]);
     }
 }

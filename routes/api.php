@@ -7,6 +7,7 @@ use \App\Http\Controllers\Api\ProductController;
 use \App\Http\Controllers\Api\UserController;
 use \App\Http\Controllers\Api\ShopController;
 use \App\Http\Controllers\Api\BannerController;
+use \App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +48,10 @@ Route::group([
 
 });
 
-Route::post('register', [\App\Http\Controllers\Api\AuthController::class, 'register']);
-Route::post('login', [\App\Http\Controllers\Api\AuthController::class, 'login']);
-Route::post('confirm', [\App\Http\Controllers\Api\AuthController::class, 'confirm']);
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+Route::post('confirm', [AuthController::class, 'confirm']);
+Route::group(['prefix' => 'recovery'], function () {
+    Route::post('', [AuthController::class, 'resetPassword']);
+    Route::post('setPassword', [AuthController::class, 'setPassword'])->middleware(['auth:sanctum']);
+});
