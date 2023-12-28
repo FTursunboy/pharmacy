@@ -22,7 +22,10 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'categoryCode' => 'required|numeric|exists:product_categories,code',
+            'categoryCode' => 'numeric|exists:product_categories,code',
+            'search' => 'string|nullable',
+            'sort' => 'string|nullable|in:price,name',
+            'order' => 'string|nullable|in:asc,desc',
         ];
     }
 

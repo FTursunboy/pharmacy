@@ -63,4 +63,14 @@ class User extends Authenticatable
         return $this->belongsToMany(BookMarkedProducts::class, 'bookmarked_products', 'user_id', 'product_code');
     }
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($user) {
+            $user->phone = preg_replace('/[^0-9]/', '', $user->phone); // удаляем все символы, кроме цифр
+            $user->phone = '+7' . ltrim($user->phone, '7'); // добавляем страновый код, если его нет
+        });
+    }
+
 }

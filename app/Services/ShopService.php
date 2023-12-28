@@ -18,10 +18,24 @@ class ShopService implements ShopServiceInterface
 {
 
     public function index() {
+
+        $shop = Shop::where([
+           [ 'code', Auth::user()->shop_code],
+            ['city_code', '!=', null]
+        ])->first();
+
+        if (!$shop) {
+            return Shop::query()
+                ->where([
+                    ['shop_functions_enabled', 1]
+                ])
+                ->get();
+        }
+
         return Shop::query()
                 ->where([
                     ['shop_functions_enabled', 1],
-                    ['code', Auth::user()->shop_code]
+                    ['city_code', $shop->city_code]
                 ])
             ->get();
     }

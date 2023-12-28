@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RegisterRequest extends FormRequest
 {
@@ -24,10 +25,13 @@ class RegisterRequest extends FormRequest
         return [
             'phone' => [
                 'string',
-                'unique:users,phone'
+                'phone' => [
+                    'string',
+                    'unique:users,phone'
+                ],
             ],
             'password' => 'string|min:6',
-            'notify_offers' => 'boolean'
+            'notify_offers' => 'boolean',
         ];
     }
 
@@ -35,6 +39,7 @@ class RegisterRequest extends FormRequest
     {
         return [
             'phone.unique' => 'Аккаунт уже существут. Выполните вход',
+            'phone.*' => 'Введите правильный номер телефона'
         ];
     }
 }

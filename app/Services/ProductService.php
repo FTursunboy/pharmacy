@@ -22,79 +22,65 @@ class ProductService implements ProductServiceInterface
 
     public function getProducts(array $data)
     {
+        $categoryCode = $data['categoryCode'] ?? null;
+        $search = $data['search'] ?? null;
+        $sort = $data['sort'] ?? 'price';
+        $order = $data['order'] ?? 'asc';
 
-        $categoryCode = $data['categoryCode'];
+        $products = Product::with(['property', 'image', 'promotionActionPageList']);
 
-        $products = DB::table('products')
-            ->join('product_properties as pp', 'pp.product_code', 'products.code')
-            ->leftJoin('product_images as image', 'image.product_code', 'products.code')
-            ->where([
-                ['products.category_id', $categoryCode]
-            ])
-            ->select('products.id', 'products.code', 'products.name', 'products.manufacturer', 'products.description', 'image.image_name', 'pp.price_stock', 'pp.price', 'pp.stock')
-            ->paginate();
+        $products->when(!$categoryCode && $search, function ($query) use ($search) {
+            $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('name_search', 'like', '%' . $search . '%');
+        });
 
+        $products->when($categoryCode, function ($query) use ($categoryCode, $search) {
+            $query->join('product_properties as pp', 'pp.product_code', 'products.code')
+                ->leftJoin('product_images as image', 'image.product_code', 'products.code')
+                ->where('products.category_id', $categoryCode)
+                ->where(function ($query) use ($search) {
+                    $query->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('name_search', 'like', '%' . $search . '%');
+                })
+                ->select('products.id', 'products.code', 'products.name', 'products.manufacturer', 'products.description', 'image.image_name', 'pp.price_stock', 'pp.price', 'pp.stock', 'products.name_search');
+        });
 
-        if ($products->count() <= 0) {
-            throw ValidationException::withMessages(['message' => 'The selected code is invalid.']);
-        }
+        $products->when(!$categoryCode, function ($query) {
+            $query->join('product_properties as pp', 'pp.product_code', 'products.code')
+                ->join('product_images as image', 'image.product_code', 'products.code')
+                ->select('products.id', 'products.code', 'products.name', 'products.manufacturer', 'products.description', 'image.image_name', 'pp.price_stock', 'pp.price', 'pp.stock', 'products.name_search')
+                ->distinct('pp.product_code');
+        });
 
-        foreach ($products as $product) {
+        $products->when($sort && $order, function ($query) use ($sort, $order) {
+            $query->orderBy($sort, $order);
+        });
 
-            if ($product) {
-                if ($product->stock == 0) {
-                    $product->price = $product->price_stock !== null && $product->price_stock != 0
-                        ? $product->price_stock
-                        : $product->price;
-                    $product->old_price = null;
+        $products->each(function ($product) {
+            if ($product->stock == 0) {
+                $product->price = $product->price_stock !== null && $product->price_stock != 0
+                    ? $product->price_stock
+                    : $product->price;
+                $product->old_price = null;
+            } else {
+                $promotion = PromotionActionPageList::where('product_code', $product->code)->first();
 
+                if ($promotion) {
+                    $product->price = $promotion->price;
+                    $product->old_price = $promotion->price_old;
                 } else {
-                    $promotion = PromotionActionPageList::where('product_code', $product->code)->first();
-
-                    if ($promotion) {
-                        $product->price = $promotion->price;
-                        $product->old_price = $promotion->price_old;
-
-                    } else {
-                        $product->price = $product->price;
-                        $product->old_price = null;
-
-                    }
+                    $product->price = $product->price;
+                    $product->old_price = null;
                 }
             }
-        }
+        });
 
 
-        return $products;
+
+
+        return $products->paginate(20);
     }
 
-    //Метод “/product“
-    //
-    //Принимает body параметром code товара
-    //
-    //Вернуть товар, выбирая тот, у которого shop_code одинаковый с shop_code юзера
-    //
-    //
-    //
-    //Товар должен содержать поля:
-    //
-    //id,
-    //
-    //code,
-    //
-    //name,
-    //
-    //manufacturer,
-    //
-    //description,
-    //
-    //image_name (брать из табл. product_images по code товара из табл. product)
-    //
-    //price (отдавать по той же логике, которая в списке товаров)
-    //
-    //old_price (по той же логике, которая в списке товаров)
-    //
-    //actions_list список из первых 5 элементов таблицы promotion_actions_page_list. У этих 5 элементов те же поля, что и у элементов, возвращаемых методом “/products” (name, code, image_name, price, old_price). Только price и oldPrice брать сразу тут (в табл. promotion_actions_page_list)
 
     public function getProductByCode(array $data)
     {

@@ -11,5 +11,9 @@ class PromotionActionPageList extends Model
 
     protected $table = 'promotion_actions_page_list';
 
+    public function product() {
+        return $this->hasOne(Product::class, 'code', 'product_code');
+    }
+
 
 }
