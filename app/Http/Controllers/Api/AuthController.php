@@ -52,7 +52,12 @@ class AuthController extends Controller
 
     public function setPassword(SetPasswordRequest $request, AuthServiceInterface $service) :JsonResponse
     {
-        return $this->success($service->setPassword($request->validated()));
+        $user = $service->setPassword($request->validated());
+        $token = $user->createToken('api token')->plainTextToken;
+        return response()->json([
+            'user' => AuthResource::make($user),
+            'token' => $token,
+        ]);
     }
 
 

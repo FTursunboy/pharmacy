@@ -81,5 +81,7 @@ class AuthService implements AuthServiceInterface
         $user->update([
             'password' => Hash::make($data['password']),
         ]);
+
+        return $user;
     }
 }
