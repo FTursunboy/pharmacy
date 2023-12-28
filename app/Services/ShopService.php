@@ -21,8 +21,7 @@ class ShopService implements ShopServiceInterface
         return Shop::query()
                 ->where([
                     ['shop_functions_enabled', 1],
-                    ['name', '!=', ''],
-                    ['name', '!=', ' ']
+                    ['code', Auth::user()->shop_code]
                 ])
             ->get();
     }
