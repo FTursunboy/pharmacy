@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\BookMarkedProducts;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class ProductResource extends JsonResource
 {
@@ -21,7 +22,10 @@ class ProductResource extends JsonResource
             'image_name' => $this->resource->image_name,
             'price' => $this->resource->price,
             'old_price' => $this->resource->old_price,
-            'isFavourite' => BookMarkedProducts::query()->where('product_code', $this->resource->code)->exists()
+            'isFavourite' => BookMarkedProducts::query()->where([
+                ['product_code', $this->resource->code],
+                ['user_id' => Auth::id()]
+            ])->exists()
         ];
     }
 }
