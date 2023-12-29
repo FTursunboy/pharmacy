@@ -22,11 +22,11 @@ class UserResource extends JsonResource
 
         return [
             'id' => $this->resource->id,
-            'shop_code' => $this->resource->shop_code,
             'name' => $this->resource->name,
             'email' => $this->resource->email,
             'phone' => $this->resource->phone,
-            'city' => $city
+            'city' => $city,
+            'shop' => ShopResource::make(Shop::where('code', $this->shop_code)->first()),
         ];
 
 
