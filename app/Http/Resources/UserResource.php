@@ -28,7 +28,5 @@ class UserResource extends JsonResource
             'city' => $city,
             'shop' => ShopResource::make(Shop::where('code', $this->shop_code)->first()),
         ];
-
-
     }
 }

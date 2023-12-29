@@ -22,6 +22,6 @@ class PhoneRule implements Rule
 
     public function message()
     {
-        return 'Аккаунт уже существут. Выполните вход';
+        return 'Аккаунт уже существует. Выполните вход';
     }
 }

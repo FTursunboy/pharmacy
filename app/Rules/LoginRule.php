@@ -22,6 +22,6 @@ class LoginRule implements Rule
 
     public function message()
     {
-        return 'These credentials do not match our records';
+        return 'Неверные данные';
     }
 }
