@@ -15,7 +15,6 @@ class AuthService implements AuthServiceInterface
 
     public function register(array $data)
     {
-
         $user =  $this->modelClass::firstOrCreate([
             'phone' => $data['phone'],
             'name' => 'user',
@@ -29,8 +28,6 @@ class AuthService implements AuthServiceInterface
         $user->update([
             'code' => $code
         ]);
-
-
     }
 
     public function login(array $data)
@@ -38,7 +35,6 @@ class AuthService implements AuthServiceInterface
         $cleanedInputPhone = preg_replace('/[^0-9]/', '', $data['phone']);
 
         $user = $this->modelClass::where('phone', $cleanedInputPhone)->first();
-
 
         if (!$user) {
             $user = $this->modelClass::where('phone', $data['phone'])->first();
