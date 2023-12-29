@@ -9,6 +9,8 @@ use App\Models\ProductProperty;
 use App\Models\PromotionActionPageList;
 use App\Services\Contracts\ProductServiceInterface;
 use Carbon\Carbon;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -19,8 +21,7 @@ class ProductService implements ProductServiceInterface
 
     const ON_PAGE = 20;
 
-
-    public function getProducts(array $data)
+    public function getProducts(array $data) :LengthAwarePaginator
     {
         $categoryCode = $data['categoryCode'] ?? null;
         $search = $data['search'] ?? null;
@@ -76,9 +77,7 @@ class ProductService implements ProductServiceInterface
         });
 
 
-
-
-        return $products->paginate(20);
+        return $products->paginate(self::ON_PAGE);
     }
 
 

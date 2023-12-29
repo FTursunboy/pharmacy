@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\Auth;
 
+use App\Rules\PhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -25,21 +26,11 @@ class RegisterRequest extends FormRequest
         return [
             'phone' => [
                 'string',
-                'phone' => [
-                    'string',
-                    'unique:users,phone'
-                ],
+                new PhoneRule()
             ],
             'password' => 'string|min:6',
             'notify_offers' => 'boolean',
         ];
     }
 
-    public function messages()
-    {
-        return [
-            'phone.unique' => 'Аккаунт уже существут. Выполните вход',
-            'phone.*' => 'Введите правильный номер телефона'
-        ];
-    }
 }

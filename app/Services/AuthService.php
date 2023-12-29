@@ -15,6 +15,7 @@ class AuthService implements AuthServiceInterface
 
     public function register(array $data)
     {
+
         $user =  $this->modelClass::firstOrCreate([
             'phone' => $data['phone'],
             'name' => 'user',
@@ -34,11 +35,26 @@ class AuthService implements AuthServiceInterface
 
     public function login(array $data)
     {
-        $user = $this->modelClass::where('phone', $data['phone'])->first();
+        $cleanedInputPhone = preg_replace('/[^0-9]/', '', $data['phone']);
+
+        $user = $this->modelClass::where('phone', $cleanedInputPhone)->first();
+
+
+        if (!$user) {
+            $user = $this->modelClass::where('phone', $data['phone'])->first();
+        }
+
+        if (!$user && !str_starts_with($data['phone'], '+')) {
+            $phone = '+' . $data['phone'];
+            $user = $this->modelClass::where('phone', $phone)->first();
+        }
 
         if (!$user || !Hash::check($data['password'], $user->password)) {
+
             throw ValidationException::withMessages(['message' => __('auth.failed')]);
         }
+
+
 
         return $user;
 
@@ -47,7 +63,19 @@ class AuthService implements AuthServiceInterface
 
     public function codeVerification(array $data)
     {
-        $model = $this->modelClass::where('phone', $data['phone'])->first();
+        $cleanedInputPhone = preg_replace('/[^0-9]/', '', $data['phone']);
+
+        $model = $this->modelClass::where('phone', $cleanedInputPhone)->first();
+
+
+        if (!$model) {
+            $model = $this->modelClass::where('phone', $data['phone'])->first();
+        }
+
+        if (!$model && !str_starts_with($data['phone'], '+')) {
+            $phone = '+' . $data['phone'];
+            $model = $this->modelClass::where('phone', $phone)->first();
+        }
 
         if ($model) {
             if ($model->code == $data['code']) {

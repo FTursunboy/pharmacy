@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Api\Auth;
 
+use App\Rules\LoginRule;
+use App\Rules\PhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LoginRequest extends FormRequest
@@ -22,15 +24,12 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone' => 'string',
+            'phone' => [
+                'string',
+                new LoginRule()
+            ],
             'password' => 'string|min:6',
         ];
     }
 
-    public function messages()
-    {
-        return [
-            'phone.unique' => 'Аккаунт уже существует. Выполните вход',
-        ];
-    }
 }
