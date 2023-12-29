@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Api\Auth;
 
+use App\Rules\LoginRule;
 use App\Rules\PhoneRule;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ResetPasswordRequest extends FormRequest
@@ -25,7 +27,7 @@ class ResetPasswordRequest extends FormRequest
         return [
             'phone' => [
                 'required',
-                new PhoneRule() ]
+                new LoginRule() ]
         ];
     }
 }
