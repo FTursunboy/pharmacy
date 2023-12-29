@@ -24,7 +24,7 @@ class ProductResource extends JsonResource
             'old_price' => $this->resource->old_price,
             'isFavourite' => BookMarkedProducts::query()->where([
                 ['product_code', $this->resource->code],
-                ['user_id' => Auth::id()]
+                ['user_id', Auth::id()]
             ])->exists()
         ];
     }
