@@ -30,7 +30,7 @@ class VerifyRequest extends FormRequest
     public function messages()
     {
         return [
-            'phone.unique' => 'Аккаунт уже существут. Выполните вход',
+            'phone.unique' => 'Аккаунт уже существует. Выполните вход',
         ];
     }
 }

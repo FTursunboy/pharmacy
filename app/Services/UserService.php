@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\City;
 use App\Models\Shop;
 use App\Models\User;
-use App\Services\Contracts\AuthServiceInterface;
 use App\Services\Contracts\UserServiceInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -23,10 +22,6 @@ class UserService implements UserServiceInterface
 
     public function update(array $data)
     {
-
-        //Сделать в поле city принимаемый параметр id города. Если в body есть поле city, то в табл. cities найти этот город, взять его code, взять в таблице shops первый элемент с этим city_code.
-        // Взять code этого элемента и установить его этому user в таблице users в ячейку shop_code
-
         $user = User::find(Auth::id());
 
         if (isset($data['shop_code']) && $data['shop_code']) {
