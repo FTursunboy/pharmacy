@@ -24,9 +24,7 @@ use \App\Http\Controllers\Api\AuthController;
 Route::group([
     'middleware' => ['auth:sanctum'],
 ], function () {
-    Route::get('actionList', function (){
-        dd(1);
-    });
+    Route::get('actionList', [ProductController::class, 'actionList']);
 
     Route::get('activeCategories', [ProductCategoryController::class, 'activeCategories']);
     Route::get('banners', [BannerController::class, 'getBanners']);

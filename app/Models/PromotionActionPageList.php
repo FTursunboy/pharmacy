@@ -7,12 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class PromotionActionPageList extends Model
 {
-    use HasFactory;
-
     protected $table = 'promotion_actions_page_list';
 
     public function product() {
-        return $this->hasOne(Product::class, 'code', 'product_code');
+        return $this->belongsTo(Product::class, 'code', 'product_code');
     }
 
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FavouriteRequest;
 use App\Http\Requests\Api\ProductCodeRequest;
 use App\Http\Requests\Api\ProductRequest;
+use App\Http\Resources\ActionListResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ProductByCodeResource;
 use App\Http\Resources\ProductResource;
@@ -44,9 +45,8 @@ class ProductController extends Controller
         return $this->success(ProductResource::collection($service->getFavourites()));
     }
 
-    public function actionList() :JsonResponse
+    public function actionList(ProductServiceInterface $service) :JsonResponse
     {
-        dd(1);
-      return $this->success(ProductResource::collection($service->actionList()));
+      return $this->success(ActionListResource::collection($service->actionList()));
     }
 }

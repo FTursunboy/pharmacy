@@ -186,9 +186,10 @@ class ProductService implements ProductServiceInterface
 
     public function actionList() :LengthAwarePaginator
     {
-        return PromotionActionPageList::with('product')
-            ->where('shop_code', Auth::user()->shop_code)
+       return PromotionActionPageList::with('product')
             ->paginate(10);
+
+
 
     }
 
