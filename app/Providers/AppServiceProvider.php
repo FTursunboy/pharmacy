@@ -6,10 +6,12 @@ use App\Services\AuthService;
 use App\Services\BannerService;
 use App\Services\Contracts\AuthServiceInterface;
 use App\Services\Contracts\BannerServiceInterface;
+use App\Services\Contracts\OrderServiceInterface;
 use App\Services\Contracts\ProductCategoryServiceInterface;
 use App\Services\Contracts\ProductServiceInterface;
 use App\Services\Contracts\ShopServiceInterface;
 use App\Services\Contracts\UserServiceInterface;
+use App\Services\OrderService;
 use App\Services\ProductCategoryService;
 use App\Services\ProductService;
 use App\Services\ShopService;
@@ -29,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(UserServiceInterface::class, UserService::class);
         $this->app->singleton(ShopServiceInterface::class, ShopService::class);
         $this->app->singleton(BannerServiceInterface::class, BannerService::class);
+        $this->app->singleton(OrderServiceInterface::class, OrderService::class);
     }
 
     /**

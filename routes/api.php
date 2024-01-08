@@ -51,6 +51,8 @@ Route::group([
         Route::post('/remove', [ProductController::class, 'removeFromFavourites']);
     });
 
+    Route::get('orders', [\App\Http\Controllers\Api\OrderModelController::class, 'index']);
+
 
 
 });
