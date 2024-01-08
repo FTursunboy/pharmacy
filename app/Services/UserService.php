@@ -65,7 +65,7 @@ class UserService implements UserServiceInterface
         return $user_data;
     }
 
-    public function getUserDocs() :UserPassports
+    public function getUserDocs() :UserPassports|null
     {
         return UserPassports::where('user_id', Auth::id())->first();
     }
