@@ -8,4 +8,5 @@ interface UserServiceInterface
 
     public function update(array $data);
 
+    public function addDocs(array $data);
 }

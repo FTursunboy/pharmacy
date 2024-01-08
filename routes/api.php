@@ -40,6 +40,9 @@ Route::group([
         Route::patch('/', [UserController::class, 'update']);
     });
 
+    Route::post('userDocs', [UserController::class, 'userDocs']);
+    Route::get('userDocs', [UserController::class, 'getUserDocs']);
+
     Route::group([
         'prefix' => 'favourites'
     ], function () {

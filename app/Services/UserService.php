@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\City;
 use App\Models\Shop;
 use App\Models\User;
+use App\Models\UserPassports;
 use App\Services\Contracts\UserServiceInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -45,5 +46,27 @@ class UserService implements UserServiceInterface
         $user->save();
 
         return $user;
+    }
+
+    public function addDocs(array $data) :UserPassports
+    {
+        $user_data = UserPassports::where('user_id', Auth::id())->firstOrNew();
+
+        $user_data->passport = $data['passport'];
+        $user_data->fio = $data['fio'];
+        $user_data->issue_place = $data['issue_place'];
+        $user_data->inn = $data['inn'];
+        $user_data->phone = Auth::user()->phone;
+        $user_data->email = Auth::user()->email;
+        $user_data->user_id = Auth::id();
+
+        $user_data->save();
+
+        return $user_data;
+    }
+
+    public function getUserDocs() :UserPassports
+    {
+        return UserPassports::where('user_id', Auth::id())->first();
     }
 }
