@@ -43,4 +43,10 @@ class ProductController extends Controller
     {
         return $this->success(ProductResource::collection($service->getFavourites()));
     }
+
+    public function actionList() :JsonResponse
+    {
+        dd(1);
+      return $this->success(ProductResource::collection($service->actionList()));
+    }
 }
