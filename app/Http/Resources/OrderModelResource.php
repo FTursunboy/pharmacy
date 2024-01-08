@@ -3,7 +3,9 @@
 namespace App\Http\Resources;
 
 use App\Models\Product;
+use App\Models\PromotionActionPageList;
 use App\Models\Shop;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -12,8 +14,6 @@ class OrderModelResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-
-
         return [
             'id' => $this->id,
             'remote_code' => $this->remote_code,
@@ -21,8 +21,8 @@ class OrderModelResource extends JsonResource
             'wait' => $this->wait,
             'created_at' => $this->created_at,
             'shop' => ShopResource::make($this->shop),
-            'products' => ProductResource::collection(Product::whereIn('code', $this->productCodes())->get()),
-            'promotion_action' => ProductResource::collection(Product::whereIn('code', $this->promotionProductCodes())->get()),
+            'products' => ProductResource::collection((new ProductService())->getProductForOrder($this->productCodes())),
+            'promotion_actions' => ActionListResource::collection(PromotionActionPageList::whereIn('product_code', $this->promotionProductCodes())->get()),
         ];
     }
 }

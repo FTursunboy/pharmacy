@@ -189,9 +189,44 @@ class ProductService implements ProductServiceInterface
        return PromotionActionPageList::with('product')
             ->paginate(10);
 
-
-
     }
+
+
+
+    public function getProductForOrder($ids)
+    {
+
+        $products = Product::with(['property', 'image', 'promotionActionPageList']);
+
+        $products->join('product_properties as pp', 'pp.product_code', 'products.code')
+                ->leftJoin('product_images as image', 'image.product_code', 'products.code')
+                ->whereIn('products.code', $ids)
+                ->select('products.id', 'products.code', 'products.name', 'image.image_name', 'pp.price_stock', 'pp.price', 'pp.stock');
+
+
+        $products->each(function ($product) {
+            if ($product->stock == 0) {
+                $product->price = $product->price_stock !== null && $product->price_stock != 0
+                    ? $product->price_stock
+                    : $product->price;
+                $product->old_price = null;
+            } else {
+                $promotion = PromotionActionPageList::where('product_code', $product->code)->first();
+
+                if ($promotion) {
+                    $product->price = $promotion->price;
+                    $product->old_price = $promotion->price_old;
+                } else {
+                    $product->price = $product->price;
+                    $product->old_price = null;
+                }
+            }
+        });
+
+
+        return $products->get();
+    }
+
 
 
 }
