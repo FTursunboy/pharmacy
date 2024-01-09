@@ -113,8 +113,10 @@ class ProductService implements ProductServiceInterface
                 $product->price = $promotion->price;
                 $product->old_price = $promotion->old_price;
             }
-            $product->price = $product->price;
-            $product->old_price = null;
+            else {
+                $product->price = $product->price;
+                $product->old_price = null;
+            }
         }
         $action_list = DB::table('promotion_actions_page_list as pr')
             ->join('products as p', 'pr.product_code', 'p.code')
@@ -198,30 +200,13 @@ class ProductService implements ProductServiceInterface
 
         $products = Product::with(['property', 'image', 'promotionActionPageList']);
 
-        $products->join('product_properties as pp', 'pp.product_code', 'products.code')
+        $products->join('order_products as o', 'o.product_code', 'products.code')
                 ->leftJoin('product_images as image', 'image.product_code', 'products.code')
                 ->whereIn('products.code', $ids)
-                ->select('products.id', 'products.code', 'products.name', 'image.image_name', 'pp.price_stock', 'pp.price', 'pp.stock');
+                ->select('products.id', 'products.code', 'products.name', 'image.image_name', 'o.price', );
 
 
-        $products->each(function ($product) {
-            if ($product->stock == 0) {
-                $product->price = $product->price_stock !== null && $product->price_stock != 0
-                    ? $product->price_stock
-                    : $product->price;
-                $product->old_price = null;
-            } else {
-                $promotion = PromotionActionPageList::where('product_code', $product->code)->first();
 
-                if ($promotion) {
-                    $product->price = $promotion->price;
-                    $product->old_price = $promotion->price_old;
-                } else {
-                    $product->price = $product->price;
-                    $product->old_price = null;
-                }
-            }
-        });
 
 
         return $products->get();

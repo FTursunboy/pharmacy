@@ -22,7 +22,6 @@ class OrderModelResource extends JsonResource
             'created_at' => $this->created_at,
             'shop' => ShopResource::make($this->shop),
             'products' => ProductResource::collection((new ProductService())->getProductForOrder($this->productCodes())),
-            'promotion_actions' => ActionListResource::collection(PromotionActionPageList::whereIn('product_code', $this->promotionProductCodes())->get()),
         ];
     }
 }
