@@ -15,10 +15,11 @@ class AuthService implements AuthServiceInterface
 
     public function register(array $data)
     {
+
         $user =  $this->modelClass::firstOrCreate([
             'phone' => $data['phone'],
             'name' => 'user',
-            'password' => Hash::make($data['password']),
+            'password' => 'as23d1gh' . md5($data['password']) . 'cvb8934er',
             'notify_offers' => $data['notify_offers'],
             'shop_code' => '5222'
         ]);
@@ -45,7 +46,7 @@ class AuthService implements AuthServiceInterface
             $user = $this->modelClass::where('phone', $phone)->first();
         }
 
-        if (!$user || !Hash::check($data['password'], $user->password)) {
+        if (!$user || 'as23d1gh' . md5($data['password']) . 'cvb8934er' !== $user->password) {
 
             throw ValidationException::withMessages(['message' => __('auth.failed')]);
         }
@@ -103,7 +104,7 @@ class AuthService implements AuthServiceInterface
         $user = Auth::user();
 
         $user->update([
-            'password' => Hash::make($data['password']),
+            'password' => 'as23d1gh' . md5($data['password']) . 'cvb8934er',
         ]);
 
         return $user;
