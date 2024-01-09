@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
-class BannerService implements OrderServiceInterface
+class BannerService implements BannerServiceInterface
 {
 
     public function index(): Collection
