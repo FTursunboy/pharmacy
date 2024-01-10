@@ -21,7 +21,7 @@ class OrderModelResource extends JsonResource
             'wait' => $this->wait,
             'created_at' => $this->created_at,
             'shop' => ShopResource::make($this->shop),
-            'products' => ProductResource::collection((new ProductService())->getProductForOrder($this->productCodes())),
+            'products' => ProductOrderResource::collection((new ProductService())->getProductForOrder($this->productCodes())),
         ];
     }
 }

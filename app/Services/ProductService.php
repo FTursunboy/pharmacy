@@ -213,15 +213,15 @@ class ProductService implements ProductServiceInterface
     public function getProductForOrder($ids)
     {
 
+
         $products = Product::with(['property', 'image', 'promotionActionPageList']);
 
         $products->join('order_products as o', 'o.product_code', 'products.code')
-                ->leftJoin('product_images as image', 'image.product_code', 'products.code')
-                ->whereIn('products.code', $ids)
-                ->select('products.id', 'products.code', 'products.name', 'image.image_name', 'o.price', );
-
-
-
+            ->leftJoin('product_images as image', 'image.product_code', 'products.code')
+            ->whereIn('products.code', $ids)
+            ->select('products.id', 'products.code', 'products.name', 'image.image_name', 'o.price')
+            ->selectRaw('COUNT(o.product_code) as count')
+            ->groupBy('products.code');
 
 
         return $products->get();

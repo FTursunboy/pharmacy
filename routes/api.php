@@ -43,7 +43,7 @@ Route::group([
     Route::post('userDocs', [UserController::class, 'userDocs']);
     Route::get('userDocs', [UserController::class, 'getUserDocs']);
 
-    Route::get('manufactures/{categoryCode?}', [ProductController::class, 'manufacturer']);
+    Route::get('manufacturers/{categoryCode?}', [ProductController::class, 'manufacturer']);
 
 
     Route::group([
