@@ -83,6 +83,7 @@ class ProductService implements ProductServiceInterface
 
     public function getProductByCode(array $data)
     {
+
         $code = $data['code'];
         $userShopCode = Auth::user()->shop_code;
 
@@ -102,6 +103,7 @@ class ProductService implements ProductServiceInterface
 
 
         if ($product->stock == 0) {
+            dump($product->stock);
             $product->price = $product->price_stock !== null && $product->price_stock != 0
                 ? $product->price_stock
                 : $product->price;
