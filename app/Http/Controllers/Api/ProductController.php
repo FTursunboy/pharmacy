@@ -49,4 +49,10 @@ class ProductController extends Controller
     {
       return $this->success(ActionListResource::collection($service->actionList()));
     }
+
+    public function manufacturer(ProductServiceInterface $service, string $productCode = null) :JsonResponse
+    {
+
+        return $this->success($service->manufacturers($productCode));
+    }
 }

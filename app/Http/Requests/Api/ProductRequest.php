@@ -26,6 +26,7 @@ class ProductRequest extends FormRequest
             'search' => 'string|nullable',
             'sort' => 'string|nullable|in:price,name',
             'order' => 'string|nullable|in:asc,desc',
+            'manufacturer' => 'string|nullable'
         ];
     }
 

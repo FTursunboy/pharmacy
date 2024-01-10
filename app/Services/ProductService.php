@@ -27,6 +27,7 @@ class ProductService implements ProductServiceInterface
         $search = $data['search'] ?? null;
         $sort = $data['sort'] ?? 'price';
         $order = $data['order'] ?? 'asc';
+        $manufacturer = $data['manufacturer'] ?? null;
 
         $products = Product::with(['property', 'image', 'promotionActionPageList']);
 
@@ -57,6 +58,10 @@ class ProductService implements ProductServiceInterface
             $query->orderBy($sort, $order);
         });
 
+        $products->when($manufacturer, function ($query) use ($manufacturer) {
+            $query->where('manufacturer', 'like', '%' . $manufacturer . '%');
+        });
+
         $products->each(function ($product) {
             if ($product->stock == 0) {
                 $product->price = $product->price_stock !== null && $product->price_stock != 0
@@ -75,6 +80,7 @@ class ProductService implements ProductServiceInterface
                 }
             }
         });
+
 
 
         return $products->paginate(self::ON_PAGE);
@@ -222,5 +228,29 @@ class ProductService implements ProductServiceInterface
     }
 
 
+    public function manufacturers(?string $data)
+    {
+        if ($data) {
+            $products = DB::table('products')
+                ->join('product_properties as pp', 'pp.product_code', 'products.code')
+                ->where('products.category_id', $data)
+                ->select('manufacturer')
+                ->distinct()
+                ->pluck('manufacturer')
+                ->toArray();
 
+        }
+       else {
+           $products = DB::table('products')
+               ->join('product_properties as pp', 'pp.product_code', 'products.code')
+               ->select('manufacturer')
+               ->distinct()
+               ->pluck('manufacturer')
+               ->toArray();
+
+       }
+
+
+        return $products;
+    }
 }

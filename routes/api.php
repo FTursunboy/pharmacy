@@ -43,6 +43,9 @@ Route::group([
     Route::post('userDocs', [UserController::class, 'userDocs']);
     Route::get('userDocs', [UserController::class, 'getUserDocs']);
 
+    Route::get('manufactures/{categoryCode?}', [ProductController::class, 'manufacturer']);
+
+
     Route::group([
         'prefix' => 'favourites'
     ], function () {

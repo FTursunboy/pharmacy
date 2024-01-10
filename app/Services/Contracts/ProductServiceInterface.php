@@ -16,4 +16,6 @@ interface ProductServiceInterface
 
     public function getFavourites();
 
+    public function manufacturers(string $data);
+
 }
