@@ -108,15 +108,19 @@ class ProductService implements ProductServiceInterface
             $product->old_price = null;
         } else {
             $promotion = PromotionActionPageList::where('product_code', $product->code)->first();
-
+            dump($promotion);
             if ($promotion) {
                 $product->price = $promotion->price;
                 $product->old_price = $promotion->old_price;
+                dump($product);
+
             }
             else {
+                dump(1);
                 $product->price = $product->price;
                 $product->old_price = null;
             }
+            dd($product);
         }
 
         $action_list = DB::table('promotion_actions_page_list as pr')
