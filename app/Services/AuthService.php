@@ -64,6 +64,10 @@ class AuthService implements AuthServiceInterface
 
         $model = $this->modelClass::where('phone', $cleanedInputPhone)->first();
 
+        if(!$model)
+        {
+            $model = $this->modelClass::where('phone', $data['phone'])->first();
+        }
 
         if (!$model) {
             $model = $this->modelClass::where('phone', $data['phone'])->first();

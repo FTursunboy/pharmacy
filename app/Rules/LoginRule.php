@@ -10,7 +10,6 @@ class LoginRule implements Rule
 
     public function passes($attribute, $value)
     {
-
         $cleanedPhones = DB::table('users')->pluck('phone')->map(function ($phone) {
             return preg_replace('/[^0-9]/', '', $phone);
         });
