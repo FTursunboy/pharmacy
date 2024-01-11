@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use App\Services\Contracts\AuthServiceInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Testing\Fluent\Concerns\Has;
 use Illuminate\Validation\ValidationException;
@@ -69,21 +70,33 @@ class AuthService implements AuthServiceInterface
             $model = $this->modelClass::where('phone', $data['phone'])->first();
         }
 
-        if (!$model) {
-            $model = $this->modelClass::where('phone', $data['phone'])->first();
-        }
+
 
         if (!$model && !str_starts_with($data['phone'], '+')) {
             $phone = '+' . $data['phone'];
+
             $model = $this->modelClass::where('phone', $phone)->first();
         }
 
+
+        if (!$model)
+        {
+
+            $formattedInputPhone = '+7 (' . substr($cleanedInputPhone, 1, 3) . ') ' . substr($cleanedInputPhone, 4, 3) . '-' . substr($cleanedInputPhone, 7, 2) . '-' . substr($cleanedInputPhone, 9, 2);
+
+            $model = $this->modelClass::where('phone', $formattedInputPhone)->first();
+
+        }
+
+
         if ($model) {
+
             if ($model->code == $data['code']) {
                 $model->update([
                     'status' => User::STATUS_SUCCESS,
                     'code' => null
                 ]);
+
 
                 return $model;
             }
@@ -99,8 +112,34 @@ class AuthService implements AuthServiceInterface
 
     public function resetPassword(array $data)
     {
+        $cleanedInputPhone = preg_replace('/[^0-9]/', '', $data['phone']);
+
+        $model = $this->modelClass::where('phone', $cleanedInputPhone)->first();
+
+        if(!$model)
+        {
+            $model = $this->modelClass::where('phone', $data['phone'])->first();
+        }
+
+
+
+        if (!$model && !str_starts_with($data['phone'], '+')) {
+            $phone = '+' . $data['phone'];
+
+            $model = $this->modelClass::where('phone', $phone)->first();
+        }
+
+
+        if (!$model)
+        {
+
+            $formattedInputPhone = '+7 (' . substr($cleanedInputPhone, 1, 3) . ') ' . substr($cleanedInputPhone, 4, 3) . '-' . substr($cleanedInputPhone, 7, 2) . '-' . substr($cleanedInputPhone, 9, 2);
+
+            $model = $this->modelClass::where('phone', $formattedInputPhone)->first();
+
+        }
         $code = "000000";
-        $this->modelClass::where('phone', $data['phone'])->update(['code' => $code]);
+        $model->update(['code' => $code]);
     }
 
     public function setPassword(array $data)
