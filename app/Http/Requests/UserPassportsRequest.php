@@ -12,7 +12,7 @@ class UserPassportsRequest extends FormRequest
             'fio' => 'required|string',
             'passport' => 'nullable|string',
             'issue_place' => 'nullable|string',
-            'inn' => 'required|string'
+            'inn' => 'nullable|string'
         ];
     }
 
