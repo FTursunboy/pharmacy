@@ -61,7 +61,9 @@ class UserService implements UserServiceInterface
         if (isset($data['inn']) && $data['inn']) {
             $user_data->inn = $data['inn'];
         }
-        $user_data->fio = $data['fio'];
+        if (isset($data['fio']) && $data['fio']) {
+            $user_data->fio = $data['fio'];
+        }
         $user_data->phone = Auth::user()->phone;
         $user_data->email = Auth::user()->email;
         $user_data->user_id = Auth::id();

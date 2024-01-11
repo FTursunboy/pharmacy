@@ -9,7 +9,7 @@ class UserPassportsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fio' => 'required|string',
+            'fio' => 'nullable|string',
             'passport' => 'nullable|string',
             'issue_place' => 'nullable|string',
             'inn' => 'nullable|string'
