@@ -70,10 +70,6 @@ class AuthService implements AuthServiceInterface
 
     public function codeVerification(array $data)
     {
-        $key = 'confirm:' . $data['phone'];
-        if ($this->limiter->tooManyAttempts($key, 3)) {
-            return response()->json(['message' => 'Слишком много запросов. Пожалуйста, подождите.'], 429);
-        }
 
         $cleanedInputPhone = preg_replace('/[^0-9]/', '', $data['phone']);
 
