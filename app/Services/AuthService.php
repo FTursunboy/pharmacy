@@ -4,16 +4,25 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Services\Contracts\AuthServiceInterface;
+use Illuminate\Cache\RateLimiter;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Testing\Fluent\Concerns\Has;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class AuthService implements AuthServiceInterface
 {
     private $modelClass = User::class;
 
+    private $limiter;
+
+    public function __construct(RateLimiter $limiter)
+    {
+        $this->limiter = $limiter;
+    }
     public function register(array $data)
     {
 
@@ -61,6 +70,11 @@ class AuthService implements AuthServiceInterface
 
     public function codeVerification(array $data)
     {
+        $key = 'confirm:' . $data['phone'];
+        if ($this->limiter->tooManyAttempts($key, 3)) {
+            return response()->json(['message' => 'Слишком много запросов. Пожалуйста, подождите.'], 429);
+        }
+
         $cleanedInputPhone = preg_replace('/[^0-9]/', '', $data['phone']);
 
         $model = $this->modelClass::where('phone', $cleanedInputPhone)->first();
@@ -98,9 +112,20 @@ class AuthService implements AuthServiceInterface
                 ]);
 
 
+                $this->limiter->resetAttempts($key);
                 return $model;
             }
         }
+
+        $key = 'reset_password:' . $data['phone'];
+
+        $attempts = Cache::get($key, 0);
+
+        if ($attempts >= 3) {
+            throw new TooManyRequestsHttpException(null, 'Слишком много запросов. Пожалуйста, подождите.');
+        }
+
+        Cache::put($key, $attempts + 1, now()->addSeconds(60));
 
         throw ValidationException::withMessages(['message' => __('auth.failed')]);
     }
@@ -112,6 +137,7 @@ class AuthService implements AuthServiceInterface
 
     public function resetPassword(array $data)
     {
+
         $cleanedInputPhone = preg_replace('/[^0-9]/', '', $data['phone']);
 
         $model = $this->modelClass::where('phone', $cleanedInputPhone)->first();
@@ -140,6 +166,8 @@ class AuthService implements AuthServiceInterface
         }
         $code = "000000";
         $model->update(['code' => $code]);
+
+
     }
 
     public function setPassword(array $data)

@@ -56,8 +56,6 @@ Route::group([
 
     Route::get('orders', [\App\Http\Controllers\Api\OrderModelController::class, 'index']);
 
-
-
 });
 
 Route::post('register', [AuthController::class, 'register']);

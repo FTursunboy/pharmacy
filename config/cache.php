@@ -31,6 +31,8 @@ return [
     |
     */
 
+
+
     'stores' => [
 
         'apc' => [
@@ -55,6 +57,10 @@ return [
             'lock_path' => storage_path('framework/cache/data'),
         ],
 
+        'rate_limit' => [
+            'driver' => 'file',
+            'path' => storage_path('framework/cache/rate_limit'),
+        ],
         'memcached' => [
             'driver' => 'memcached',
             'persistent_id' => env('MEMCACHED_PERSISTENT_ID'),
