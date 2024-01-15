@@ -52,16 +52,16 @@ class UserService implements UserServiceInterface
     {
         $user_data = UserPassports::where('user_id', Auth::id())->firstOrNew();
 
-        if (isset($data['passport'])) {
+        if (isset($data['passport']) && $data['passport']) {
             $user_data->passport = $data['passport'];
         }
-        if (isset($data['issue_place'])) {
+        if (isset($data['issue_place']) && $data['issue_place']) {
             $user_data->issue_place = $data['issue_place'];
         }
-        if (isset($data['inn'])) {
+        if (isset($data['inn']) && $data['inn']) {
             $user_data->inn = $data['inn'];
         }
-        if (isset($data['fio'])) {
+        if (isset($data['fio']) && $data['fio']) {
             $user_data->fio = $data['fio'];
         }
         $user_data->phone = Auth::user()->phone;
