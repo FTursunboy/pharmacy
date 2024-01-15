@@ -11,11 +11,11 @@ class UserPassportsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->resource->id,
-            'fio' => $this->resource->fio,
-            'passport' => $this->resource->passport,
-            'issue_place' => $this->resource->issue_place,
-            'inn' => $this->resource->inn,
+            'id' => $this->resource->id ?? null,
+            'fio' => $this->resource->fio ?? null,
+            'passport' => $this->resource->passport ?? null,
+            'issue_place' => $this->resource->issue_place ?? null,
+            'inn' => $this->resource->inn ?? null,
         ];
     }
 }
