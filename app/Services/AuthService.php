@@ -108,7 +108,7 @@ class AuthService implements AuthServiceInterface
                 ]);
 
 
-                $this->limiter->resetAttempts($key);
+
                 return $model;
             }
         }
