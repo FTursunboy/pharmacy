@@ -47,7 +47,7 @@ class ProductController extends Controller
 
     public function actionList(ProductServiceInterface $service) :JsonResponse
     {
-      return $this->success(ActionListResource::collection($service->actionList()));
+      return $this->paginate(ActionListResource::collection($service->actionList()));
     }
 
     public function manufacturer(ProductServiceInterface $service, string $productCode = null) :JsonResponse
