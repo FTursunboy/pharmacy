@@ -29,7 +29,7 @@ class ProductByCodeResource extends JsonResource
                 ['product_code', $this->resource->code],
                 ['user_id', Auth::id()]
             ])->exists(),
-            'action_list' => $this->action_list
+            'action_list' => ActionListInProductResource::collection($this->action_list)
         ];
     }
 }

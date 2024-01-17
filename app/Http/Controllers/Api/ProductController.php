@@ -52,7 +52,6 @@ class ProductController extends Controller
 
     public function manufacturer(ProductServiceInterface $service, string $productCode = null) :JsonResponse
     {
-
         return $this->success($service->manufacturers($productCode));
     }
 }

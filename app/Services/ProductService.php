@@ -133,15 +133,26 @@ class ProductService implements ProductServiceInterface
 
         }
 
-        $action_list = DB::table('promotion_actions_page_list as pr')
+            $action_list = DB::table('promotion_actions_page_list as pr')
             ->join('products as p', 'pr.product_code', 'p.code')
             ->leftJoin('product_images as image', 'image.product_code', 'pr.product_code')
-            ->where([
-                ['pr.status', 1]
-            ])
+            ->leftJoin('bookmarked_products', function($join) {
+                $join->on('pr.product_code', '=', 'bookmarked_products.product_code')
+                    ->where('bookmarked_products.user_id', '=', Auth::id());
+            })
+            ->where('pr.status', 1)
             ->take(5)
-            ->select('p.name', 'image.image_name', 'p.code', 'pr.price', 'pr.old_price')
+            ->select(
+                'p.name',
+                'image.image_name',
+                'p.code',
+                'pr.price',
+                'pr.old_price',
+                DB::raw('IF(bookmarked_products.product_code IS NOT NULL, true, false) as isFavourite')
+            )
             ->get();
+
+
 
         $product->action_list = $action_list;
 
@@ -159,7 +170,6 @@ class ProductService implements ProductServiceInterface
     public function removeFromFavourites(array $data)
     {
         $user = Auth::user();
-
         $user->favourites()->detach($data['product_code']);
     }
 
